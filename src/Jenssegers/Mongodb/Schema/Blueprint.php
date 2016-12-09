@@ -172,7 +172,7 @@ class Blueprint extends \Illuminate\Database\Schema\Blueprint {
 		$db = $this->connection->getMongoDB();
 
 		// Ensure the collection is created.
-		$db->createCollection($collection);
+		$db->createCollection($collection, []);
 	}
 
 	/**

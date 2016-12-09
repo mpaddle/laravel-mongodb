@@ -16,7 +16,7 @@ class Builder extends QueryBuilder {
     /**
      * The database collection
      *
-     * @var MongoCollection
+     * @var \Jenssegers\Mongodb\Collection
      */
     protected $collection;
 

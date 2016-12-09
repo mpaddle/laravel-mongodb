@@ -466,7 +466,8 @@ class ModelTest extends TestCase {
 
 		$result = User::raw(function($collection)
 		{
-			return $collection->insert(array('name' => 'Yvonne Yoe', 'age' => 35));
+			$value = ['name' => 'Yvonne Yoe', 'age' => 35];
+			return $collection->insert($value);
 		});
 		$this->assertTrue(is_array($result));
 	}

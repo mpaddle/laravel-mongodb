@@ -98,12 +98,10 @@ class ConnectionTest extends TestCase {
 	{
 		Config::set('database.connections.mongodb.username', 'foo');
 		Config::set('database.connections.mongodb.password', 'bar');
-		$host = Config::get('database.connections.mongodb.host');
-		$port = Config::get('database.connections.mongodb.port', 27017);
-		$database = Config::get('database.connections.mongodb.database');
 
-		$this->setExpectedExceptionRegExp('MongoConnectionException', "/Failed to connect to: $host:$port: Authentication failed on database '$database' with username 'foo': auth fail/");
+		$this->setExpectedException(MongoDB\Driver\Exception\AuthenticationException::class, "Authentication failed.");
 		$connection = DB::connection('mongodb');
+		$connection->getMongoClient()->getHosts();
 	}
 
 	public function testCustomPort()
@@ -111,10 +109,11 @@ class ConnectionTest extends TestCase {
 		$port = 27000;
 		Config::set('database.connections.mongodb.port', $port);
 		$host = Config::get('database.connections.mongodb.host');
-		$database = Config::get('database.connections.mongodb.database');
 
-		$this->setExpectedException('MongoConnectionException', "Failed to connect to: $host:$port: Connection refused");
+		$this->setExpectedException(MongoDB\Driver\Exception\ConnectionTimeoutException::class,
+			"No suitable servers found (`serverSelectionTryOnce` set): [connection refused calling ismaster on '{$host}:{$port}']");
 		$connection = DB::connection('mongodb');
+		$connection->getMongoClient()->getHosts();
 	}
 
 }
